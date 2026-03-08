@@ -1,7 +1,7 @@
 // ============================================================
 //  PaperBank – Firebase Auth & Firestore Helpers
 // ============================================================
-import { auth, db, OWNER_EMAIL } from "./firebase-config.js";
+import { auth, db, OWNER_EMAIL, EDITOR_EMAILS } from "./firebase-config.js";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -46,7 +46,8 @@ export function onUserChange(callback) {
 // ── ROLE HELPERS ──────────────────────────────────────────
 export async function getUserRole(user) {
   if (!user) return "visitor";
-  if (user.email === OWNER_EMAIL) return "owner";
+if (user.email === OWNER_EMAIL) return "owner";
+if (EDITOR_EMAILS.includes(user.email)) return "editor";
   const snap = await getDoc(doc(db, "users", user.uid));
   if (snap.exists()) {
     return snap.data().role || "user";
@@ -55,18 +56,19 @@ export async function getUserRole(user) {
 }
 
 // ── SIGN UP (email + password) ────────────────────────────
-export async function signUpEmail(email, password, displayName) {
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
-  await updateProfile(cred.user, { displayName });
-  await setDoc(doc(db, "users", cred.user.uid), {
-    uid:         cred.user.uid,
-    email:       email,
-    displayName: displayName,
-    role:        "user",
-    createdAt:   serverTimestamp(),
-    banned:      false
-  });
-  return cred.user;
+export async function getUserRole(user) {
+  if (!user) return "visitor";
+
+  if (user.email === OWNER_EMAIL) return "owner";
+  if (EDITOR_EMAILS.includes(user.email)) return "editor";
+
+  const snap = await getDoc(doc(db, "users", user.uid));
+
+  if (snap.exists()) {
+    return snap.data().role || "user";
+  }
+
+  return "user";
 }
 
 // ── SIGN IN (email + password) ────────────────────────────
@@ -230,3 +232,4 @@ export async function getAllComments() {
   );
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
+
