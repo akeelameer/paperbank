@@ -24,3 +24,5 @@ export const analytics = getAnalytics(app);
 
 // ── Owner email (hardcoded – this account always has owner role) ──
 export const OWNER_EMAIL = "akeel.rncoe@gmail.com";
+// ── Editor emails ──
+export const EDITOR_EMAILS = "mohamedakeelameer@gmail.com";
