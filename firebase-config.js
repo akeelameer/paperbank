@@ -22,7 +22,6 @@ export const auth = getAuth(app);
 export const db   = getFirestore(app);
 export const analytics = getAnalytics(app);
 
-// ── Owner email (hardcoded – this account always has owner role) ──
+// ── Owner & Editor emails (hardcoded) ──
 export const OWNER_EMAIL = "akeel.rncoe@gmail.com";
-// ── Editor emails ──
-export const EDITOR_EMAILS = "mohamedakeelameer@gmail.com";
+export const EDITOR_EMAILS = []; // Add editor emails here, e.g. ["editor@example.com"]
