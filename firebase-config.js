@@ -24,5 +24,6 @@ export const analytics = getAnalytics(app);
 
 // ── Owner & Editor emails (hardcoded) ──
 export const OWNER_EMAIL = "akeel.rncoe@gmail.com";
-export const EDITOR_EMAILS = [mohamedakeelameer@gmail.com]; // Add editor emails here, e.g. ["editor@example.com"]
+export const EDITOR_EMAILS = "mohamedakeelameer@gmail.com"; // Add editor emails here, e.g. ["editor@example.com"]
+
 
