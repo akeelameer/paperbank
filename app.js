@@ -140,8 +140,8 @@ window.selectMedium = (mediumId) => {
   path = [{ type: "medium", id: mediumId, label: labels[mediumId] }];
   
   // DEBUG: Log path for debugging
-  console.log("selectMedium called, path:", path);
-  console.log("path.length:", path.length);
+  // console.log("selectMedium called, path:", path);
+  // console.log("path.length:", path.length);
 
   render();
 
@@ -163,14 +163,19 @@ function navigateToIndex(idx) {
 // ── RENDER MASTER ─────────────────────────────────────────
 async function render() {
 
-  const grid = document.getElementById("card-grid");
+  let grid = document.getElementById("card-grid");
+  if (!grid) {
+    // Fallback: try using querySelector
+    grid = document.querySelector(".card-grid");
+  }
+  
   const hero = document.getElementById("hero-section");
   const titleBar = document.getElementById("page-title-bar");
   const fileSection = document.getElementById("file-section");
 
   // DEBUG: Log render state
-  console.log("render called, path.length:", path.length, "path:", path);
-  console.log("grid element:", grid, "hero element:", hero);
+  // console.log("render called, path.length:", path.length, "path:", path);
+  // console.log("grid element:", grid, "hero element:", hero);
 
   if (fileSection) fileSection.style.display = "none";
   if (grid) grid.style.display = "grid";
@@ -277,12 +282,13 @@ function renderMediums(grid) {
 
 // ── GRADES ────────────────────────────────────────────────
 function renderGrades(grid) {
-
-  // DEBUG: Log renderGrades call
-  console.log("renderGrades called, grid:", grid);
-  
   if (!grid) {
-    console.log("ERROR: grid is null!");
+    console.log("ERROR: grid is null! Using querySelector as fallback");
+    grid = document.querySelector(".card-grid");
+  }
+  if (!grid) {
+    console.log("ERROR: Still no grid! Trying again with setTimeout");
+    setTimeout(() => renderGrades(document.getElementById("card-grid")), 100);
     return;
   }
   grid.innerHTML = "";
