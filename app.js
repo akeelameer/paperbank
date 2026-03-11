@@ -8,12 +8,7 @@ import {
   getComments, addComment, deleteComment
 } from "./firebase-helpers.js";
 
-// ── STATIC STRUCTURE ──────────────────────────────────────
-const MEDIUMS = [
-  { id: "tamil",   label: "Tamil",   icon: "fa-om",           desc: "Tamil medium resources for all grades",   cls: "tamil"   },
-  { id: "english", label: "English", icon: "fa-globe",         desc: "English medium resources for all grades", cls: "english" },
-  { id: "sinhala", label: "Sinhala", icon: "fa-dharmachakra",  desc: "Sinhala medium resources for all grades", cls: "sinhala" },
-];
+
 
 const GRADES = [
   { id: "grade6",  label: "Grade 6",  num: "6",   icon: "📚" },
@@ -593,4 +588,5 @@ window.confirmDelete = async () => {
   } catch (e) {
     showToast("Error deleting: " + e.message, "error");
   }
+
 };
