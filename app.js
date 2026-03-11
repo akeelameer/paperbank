@@ -121,7 +121,7 @@ window.doLogout = async () => {
 
 window.toggleUserDropdown = () => {
   const dd = document.getElementById("user-dropdown");
-  dd.style.display = dd.style.display === "none" ? "" : "none";
+  if (dd) dd.style.display = dd.style.display === "none" ? "" : "none";
 };
 
 // ── NAVIGATION ────────────────────────────────────────────
@@ -200,14 +200,17 @@ function setPageTitle(step) {
     folder: "Resources"
   };
 
-  document.getElementById("page-title").textContent = step.label;
-  document.getElementById("page-subtitle").textContent = map[step.type] || "";
+  const pageTitle = document.getElementById("page-title");
+  const pageSubtitle = document.getElementById("page-subtitle");
+  if (pageTitle) pageTitle.textContent = step.label;
+  if (pageSubtitle) pageSubtitle.textContent = map[step.type] || "";
 }
 
 // ── BREADCRUMB ────────────────────────────────────────────
 function renderBreadcrumb() {
 
   const bc = document.getElementById("breadcrumb");
+  if (!bc) return;
   bc.innerHTML = "";
 
   const home = document.createElement("span");
@@ -239,6 +242,7 @@ function renderBreadcrumb() {
 // ── MEDIUMS ───────────────────────────────────────────────
 function renderMediums(grid) {
 
+  if (!grid) return;
   grid.innerHTML = "";
 
   MEDIUMS.forEach(m => {
@@ -266,6 +270,7 @@ function renderMediums(grid) {
 // ── GRADES ────────────────────────────────────────────────
 function renderGrades(grid) {
 
+  if (!grid) return;
   grid.innerHTML = "";
 
   GRADES.forEach(g => {
@@ -292,6 +297,7 @@ function renderGrades(grid) {
 // ── CATEGORIES ────────────────────────────────────────────
 function renderCategories(grid) {
 
+  if (!grid) return;
   grid.innerHTML = "";
 
   CATEGORIES.forEach(c => {
@@ -329,27 +335,36 @@ function escHtml(str) {
 
 // ── MODAL HELPERS ─────────────────────────────────────────
 window.openAddFolderModal = () => {
-  document.getElementById("modal-folder").style.display = "flex";
-  document.getElementById("input-folder-name").value = "";
+  const modalFolder = document.getElementById("modal-folder");
+  const inputFolderName = document.getElementById("input-folder-name");
+  if (modalFolder) modalFolder.style.display = "flex";
+  if (inputFolderName) inputFolderName.value = "";
 };
 
 window.openAddFileModal = () => {
-  document.getElementById("modal-file").style.display = "flex";
-  document.getElementById("input-file-title").value = "";
-  document.getElementById("input-file-url").value = "";
-  document.getElementById("input-file-desc").value = "";
-  document.getElementById("input-file-type").value = "file";
+  const modalFile = document.getElementById("modal-file");
+  const inputFileTitle = document.getElementById("input-file-title");
+  const inputFileUrl = document.getElementById("input-file-url");
+  const inputFileDesc = document.getElementById("input-file-desc");
+  const inputFileType = document.getElementById("input-file-type");
+  if (modalFile) modalFile.style.display = "flex";
+  if (inputFileTitle) inputFileTitle.value = "";
+  if (inputFileUrl) inputFileUrl.value = "";
+  if (inputFileDesc) inputFileDesc.value = "";
+  if (inputFileType) inputFileType.value = "file";
   toggleLinkField();
 };
 
 window.closeModal = (modalId) => {
-  document.getElementById(modalId).style.display = "none";
+  const modal = document.getElementById(modalId);
+  if (modal) modal.style.display = "none";
 };
 
 window.toggleLinkField = () => {
-  const type = document.getElementById("input-file-type").value;
+  const typeEl = document.getElementById("input-file-type");
   const label = document.getElementById("link-label");
-  if (type === "folder") {
+  if (!typeEl || !label) return;
+  if (typeEl.value === "folder") {
     label.textContent = "Google Drive Folder Link";
   } else {
     label.textContent = "Google Drive Link";
@@ -359,6 +374,7 @@ window.toggleLinkField = () => {
 // ── TOAST NOTIFICATION ─────────────────────────────────────
 function showToast(msg, type = "default") {
   const toast = document.getElementById("toast");
+  if (!toast) return;
   toast.textContent = msg;
   toast.className = "toast " + type + " show";
   setTimeout(() => toast.classList.remove("show"), 3000);
@@ -418,6 +434,7 @@ window.addFileLink = async () => {
 
 // ── RENDER CUSTOM FOLDERS ──────────────────────────────────
 async function renderCustomFolders(grid) {
+  if (!grid) return;
   const pathKey = path.map(p => p.id).join("/");
   
   try {
@@ -462,22 +479,25 @@ async function renderFiles() {
   const fileEmpty = document.getElementById("file-empty");
   const grid = document.getElementById("card-grid");
   
+  // Return early if essential elements are missing
+  if (!fileSection || !fileList || !grid) return;
+  
   const pathKey = path.map(p => p.id).join("/");
   
   try {
     const resources = await getResources(pathKey);
     
-    grid.style.display = "none";
+    if (grid) grid.style.display = "none";
     fileSection.style.display = "block";
     
     if (resources.length === 0) {
-      fileList.innerHTML = "";
-      fileEmpty.style.display = "block";
+      if (fileList) fileList.innerHTML = "";
+      if (fileEmpty) fileEmpty.style.display = "block";
       return;
     }
     
-    fileEmpty.style.display = "none";
-    fileList.innerHTML = "";
+    if (fileEmpty) fileEmpty.style.display = "none";
+    if (fileList) fileList.innerHTML = "";
     
     const canDelete = _role === "owner" || _role === "editor";
     
@@ -503,15 +523,15 @@ async function renderFiles() {
         </div>
       `;
       
-      fileList.appendChild(item);
+      if (fileList) fileList.appendChild(item);
     });
     
     // Show/hide add file button based on role
     const btnAddFileTop = document.getElementById("btn-add-file-top");
     if (_role === "owner" || _role === "editor") {
-      btnAddFileTop.style.display = "";
+      if (btnAddFileTop) btnAddFileTop.style.display = "";
     } else {
-      btnAddFileTop.style.display = "none";
+      if (btnAddFileTop) btnAddFileTop.style.display = "none";
     }
     
   } catch (e) {
@@ -522,14 +542,18 @@ async function renderFiles() {
 // ── DELETE CONFIRMATION ─────────────────────────────────────
 window.deleteFolderConfirm = (id, name) => {
   deleteTarget = { type: "folder", id, name };
-  document.getElementById("delete-msg").textContent = `Are you sure you want to delete folder "${name}"?`;
-  document.getElementById("modal-delete").style.display = "flex";
+  const deleteMsg = document.getElementById("delete-msg");
+  const modalDelete = document.getElementById("modal-delete");
+  if (deleteMsg) deleteMsg.textContent = `Are you sure you want to delete folder "${name}"?`;
+  if (modalDelete) modalDelete.style.display = "flex";
 };
 
 window.deleteResourceConfirm = (id, title) => {
   deleteTarget = { type: "resource", id, title };
-  document.getElementById("delete-msg").textContent = `Are you sure you want to delete "${title}"?`;
-  document.getElementById("modal-delete").style.display = "flex";
+  const deleteMsg = document.getElementById("delete-msg");
+  const modalDelete = document.getElementById("modal-delete");
+  if (deleteMsg) deleteMsg.textContent = `Are you sure you want to delete "${title}"?`;
+  if (modalDelete) modalDelete.style.display = "flex";
 };
 
 window.confirmDelete = async () => {
@@ -550,18 +574,3 @@ window.confirmDelete = async () => {
     showToast("Error deleting: " + e.message, "error");
   }
 };
-
-// Make functions globally accessible for onclick handlers
-window.openAddFolderModal = openAddFolderModal;
-window.openAddFileModal = openAddFileModal;
-window.closeModal = closeModal;
-window.toggleLinkField = toggleLinkField;
-window.createFolder = createFolder;
-window.addFileLink = addFileLink;
-window.deleteFolderConfirm = deleteFolderConfirm;
-window.deleteResourceConfirm = deleteResourceConfirm;
-window.confirmDelete = confirmDelete;
-window.goHome = goHome;
-window.selectMedium = selectMedium;
-window.toggleUserDropdown = toggleUserDropdown;
-window.doLogout = doLogout;
