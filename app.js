@@ -9,7 +9,11 @@ import {
 } from "./firebase-helpers.js";
 
 // ── STATIC STRUCTURE ──────────────────────────────────────
-
+const MEDIUMS = [
+  { id: "tamil",   label: "Tamil",   icon: "fa-om",           desc: "Tamil medium resources for all grades",   cls: "tamil"   },
+  { id: "english", label: "English", icon: "fa-globe",         desc: "English medium resources for all grades", cls: "english" },
+  { id: "sinhala", label: "Sinhala", icon: "fa-dharmachakra",  desc: "Sinhala medium resources for all grades", cls: "sinhala" },
+];
 
 const GRADES = [
   { id: "grade6",  label: "Grade 6",  num: "6",   icon: "📚" },
@@ -84,29 +88,29 @@ function updateAuthUI() {
   const btnAddFileTop = document.getElementById("btn-add-file-top");
 
   if (_user) {
-    btnLogin.style.display = "none";
-    userMenu.style.display = "";
-    udName.textContent = _user.displayName || _user.email || "User";
-    udRole.textContent = _role.charAt(0).toUpperCase() + _role.slice(1);
-    udAdmin.style.display = (_role === "owner") ? "" : "none";
+    if (btnLogin) btnLogin.style.display = "none";
+    if (userMenu) userMenu.style.display = "";
+    if (udName) udName.textContent = _user.displayName || _user.email || "User";
+    if (udRole) udRole.textContent = _role.charAt(0).toUpperCase() + _role.slice(1);
+    if (udAdmin) udAdmin.style.display = (_role === "owner") ? "" : "none";
     
     // Show action bar for owner and editor
     if (_role === "owner" || _role === "editor") {
-      actionBar.style.display = "flex";
+      if (actionBar) actionBar.style.display = "flex";
       // Owner can create folders, editor can only upload resources
-      btnAddFolder.style.display = (_role === "owner") ? "" : "none";
-      btnUploadResource.style.display = "";
+      if (btnAddFolder) btnAddFolder.style.display = (_role === "owner") ? "" : "none";
+      if (btnUploadResource) btnUploadResource.style.display = "";
       // Show Add Resource button in file section
-      btnAddFileTop.style.display = "";
+      if (btnAddFileTop) btnAddFileTop.style.display = "";
     } else {
-      actionBar.style.display = "none";
-      btnAddFileTop.style.display = "none";
+      if (actionBar) actionBar.style.display = "none";
+      if (btnAddFileTop) btnAddFileTop.style.display = "none";
     }
   } else {
-    btnLogin.style.display = "";
-    userMenu.style.display = "none";
-    actionBar.style.display = "none";
-    btnAddFileTop.style.display = "none";
+    if (btnLogin) btnLogin.style.display = "";
+    if (userMenu) userMenu.style.display = "none";
+    if (actionBar) actionBar.style.display = "none";
+    if (btnAddFileTop) btnAddFileTop.style.display = "none";
   }
 }
 
@@ -160,22 +164,22 @@ async function render() {
   const titleBar = document.getElementById("page-title-bar");
   const fileSection = document.getElementById("file-section");
 
-  fileSection.style.display = "none";
-  grid.style.display = "grid";
+  if (fileSection) fileSection.style.display = "none";
+  if (grid) grid.style.display = "grid";
 
   renderBreadcrumb();
 
   if (path.length === 0) {
 
-    hero.style.display = "";
-    titleBar.style.display = "none";
+    if (hero) hero.style.display = "";
+    if (titleBar) titleBar.style.display = "none";
 
     renderMediums(grid);
 
   } else {
 
-    hero.style.display = "none";
-    titleBar.style.display = "";
+    if (hero) hero.style.display = "none";
+    if (titleBar) titleBar.style.display = "";
 
     const last = path[path.length - 1];
     setPageTitle(last);
@@ -560,5 +564,4 @@ window.confirmDelete = confirmDelete;
 window.goHome = goHome;
 window.selectMedium = selectMedium;
 window.toggleUserDropdown = toggleUserDropdown;
-
 window.doLogout = doLogout;
