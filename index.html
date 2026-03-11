@@ -86,7 +86,17 @@
     <p id="page-subtitle"></p>
   </div>
 
+  <!-- Role action bar (editor/owner tools) -->
+  <div id="action-bar" class="action-bar" style="display:none;">
+    <button id="btn-add-folder" class="btn-action owner-only" onclick="openAddFolderModal()" style="display:none;">
+      <i class="fas fa-folder-plus"></i> New Folder
+    </button>
+    <button id="btn-upload-resource" class="btn-action editor-up" onclick="openAddFileModal()" style="display:none;">
+      <i class="fas fa-upload"></i> Upload Resource
+    </button>
+  </div>
 
+  <div id="card-grid" class="card-grid"></div>
 
   <!-- File list -->
   <div id="file-section" class="file-section" style="display:none;">
@@ -246,4 +256,3 @@
 <script type="module" src="app.js"></script>
 </body>
 </html>
-
